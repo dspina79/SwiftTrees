@@ -27,3 +27,20 @@ struct Node<Value> {
     
 }
 
+
+var dean = Node("Dean")
+var danny = Node("Danny")
+dean.addChildNode(child: danny)
+
+var lynda = Node("Lynda")
+var meghan = Node("Meghan")
+var sam = Node("Samuel")
+lynda.addChildNode(child: meghan)
+lynda.addChildNode(child: sam)
+
+var mother = Node("Mama Denise")
+mother.addChildNode(child: dean)
+mother.addChildNode(child: lynda)
+
+
+print(mother)
