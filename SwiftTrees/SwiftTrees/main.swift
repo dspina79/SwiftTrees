@@ -29,7 +29,24 @@ struct Node<Value> {
 
 // this can allow for the comparison of two Nodes if their values
 // are equatable
-extension Node: Equatable where Value: Equatable {}
+extension Node: Equatable where Value: Equatable {
+    func find(_ item: Node) -> Node? {
+        if self == item {
+            return self
+        }
+        
+        for child in self.children {
+            if let match = child.find(item) {
+                return match
+            }
+        }
+        
+        return nil
+    }
+    
+}
+extension Node: Codable where Value: Codable {}
+extension Node: Hashable where Value: Hashable {}
 
 var dean = Node("Dean")
 var danny = Node("Danny")
