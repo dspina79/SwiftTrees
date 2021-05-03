@@ -27,6 +27,9 @@ struct Node<Value> {
     
 }
 
+// this can allow for the comparison of two Nodes if their values
+// are equatable
+extension Node: Equatable where Value: Equatable {}
 
 var dean = Node("Dean")
 var danny = Node("Danny")
@@ -42,5 +45,7 @@ var mother = Node("Mama Denise")
 mother.addChildNode(child: dean)
 mother.addChildNode(child: lynda)
 
-
 print(mother)
+print(dean == lynda)
+print(dean != lynda)
+print(lynda == lynda)
