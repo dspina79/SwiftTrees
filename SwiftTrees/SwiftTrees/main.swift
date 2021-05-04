@@ -7,12 +7,16 @@
 
 import Foundation
 
-struct Node<Value> {
+final class Node<Value> {
     var value: Value
     private(set) var children: [Node]
     
-    mutating func addChildNode(child: Node) {
+    func addChildNode(child: Node) {
         children.append(child)
+    }
+    
+    var count: Int {
+        return 1 + children.reduce(0) { $0 + $1.count }
     }
     
     init(_ value: Value) {
@@ -30,6 +34,11 @@ struct Node<Value> {
 // this can allow for the comparison of two Nodes if their values
 // are equatable
 extension Node: Equatable where Value: Equatable {
+    static func == (lhs: Node<Value>, rhs: Node<Value>) -> Bool {
+        return lhs.value == rhs.value && rhs.children == lhs.children
+    }
+    
+    
     func find(_ item: Node) -> Node? {
         if self == item {
             return self
@@ -46,7 +55,13 @@ extension Node: Equatable where Value: Equatable {
     
 }
 extension Node: Codable where Value: Codable {}
-extension Node: Hashable where Value: Hashable {}
+
+extension Node: Hashable where Value: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(value)
+        hasher.combine(children)
+    }
+}
 
 var dean = Node("Dean")
 var danny = Node("Danny")
