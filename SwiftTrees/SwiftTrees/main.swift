@@ -29,6 +29,22 @@ final class Node<Value> {
         self.children = children
     }
     
+    init(_ value: Value, @NodeBuilder builder: () -> [Node]) {
+        self.value = value
+        self.children = builder()
+    }
+}
+
+class StringTreeBuilder {
+    static func printTree(_ n: Node<String>, depth: Int) -> String {
+        var result = (depth == 0 ? "" : "|") + String.init(repeating: "--", count: depth) + n.value + "\n"
+        
+        for c in n.children {
+            result += printTree(c, depth: depth + 1)
+        }
+        
+        return result
+    }
 }
 
 // this can allow for the comparison of two Nodes if their values
@@ -63,6 +79,12 @@ extension Node: Hashable where Value: Hashable {
     }
 }
 
+@_functionBuilder
+struct NodeBuilder {
+    static func buildBlock<Value>(_ children: Node<Value>...) -> [Node<Value>] {
+        return children
+    }
+}
 var dean = Node("Dean")
 var danny = Node("Danny")
 dean.addChildNode(child: danny)
@@ -77,7 +99,18 @@ var mother = Node("Mama Denise")
 mother.addChildNode(child: dean)
 mother.addChildNode(child: lynda)
 
+let terri = Node("Terri") {
+    Node("Gertrude") {
+        Node("Steve")
+        Node("Louis")
+    }
+    Node("Peter")
+}
+
 print(mother)
 print(dean == lynda)
 print(dean != lynda)
 print(lynda == lynda)
+print(terri.count)
+print(terri)
+print(StringTreeBuilder.printTree(terri, depth: 0))
